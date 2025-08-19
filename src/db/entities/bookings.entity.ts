@@ -1,4 +1,11 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Users } from './users.entity';
 import { Rooms } from './rooms.entity';
 @Entity()
@@ -6,18 +13,20 @@ export class Bookings {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Rooms, (r) => r.bookings)
+  @ManyToOne(() => Rooms, (r) => r.bookings)
+  @JoinColumn({ name: 'roomId' })
   rooms: Rooms;
 
-  @OneToOne(() => Users, (u) => u.bookings)
+  @ManyToOne(() => Users, (u) => u.bookings)
+  @JoinColumn({ name: 'userId' })
   user: Users;
 
-  @Column()
-  startTime: number;
+  @Column({ type: 'timestamptz' })
+  startTime: Date;
 
-  @Column()
-  endTime: number;
+  @Column({ type: 'timestamptz' })
+  endTime: Date;
 
-  @Column()
+  @Column({ default: 'panding' })
   status: string;
 }

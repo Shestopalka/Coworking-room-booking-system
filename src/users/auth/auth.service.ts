@@ -43,6 +43,7 @@ export class AuthService {
     try {
       const userId = await this.loginHandler.handle(dto);
       const user = await this.userService.getUserById(userId);
+
       const access_token = await this.createJwtToken.handle({
         userId: userId,
         userEmail: dto.email,
